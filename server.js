@@ -13,16 +13,16 @@ const server = net.createServer((socket) => {
         channels[currentChannel] = []
     }
 
-    channels[currentChannel].push(socket)
 
+    channels[currentChannel].push(socket)
     // Send an initial message to the new client
-    socket.write('Welcome to the server! First, set your nickname: \r')
+    socket.write('Welcome to the server! First, set your nickname \r')
 
 
     // Handle incoming data from the client
     socket.on('data', (data) => {
         const message = data.toString().trim()
-        
+
         if (!nickname) {
             nickname = message
             clients.push( {socket, nickname})
@@ -31,6 +31,7 @@ const server = net.createServer((socket) => {
 
         // Channel switching with keyword /join
         } else if (message.startsWith("/join ")) {
+            console.log("Swithinhg channel")
             // take the 6 first letters off the message
             const channel = message.slice(6).trim()
             if (!channels[channel]) {
@@ -84,7 +85,15 @@ const server = net.createServer((socket) => {
     socket.on('error', (err) => {
         console.error('Error with client connection: ' + err.message)
     })
+
+   
 })
+
+
+server.on('connection', () => {
+    console.log('A client has connected!') 
+})
+
 
 server.listen(5454, () => {
     console.log('Echo server listening on port 5454')

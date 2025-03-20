@@ -8,22 +8,27 @@ const rl = readline.createInterface({
 })
 
 const client = net.createConnection({
+    
     host: "127.0.0.1",
     port: 5454
-}, () => {
+    }, () => {
     console.log("Connected")
 } 
 )
 
 
 client.on("data", (data) => {
-    
-    if (data.toString().includes("Set your nickame")) {
+    console.log(data.toString())
+    if (data.toString().includes("set your nickname:")) {
         rl.question("Enter your nickname: ", (nickname) => {
             client.write(nickname)
-            console.log(`Nickname set to ${nickname}`)
+            
         })
     }
+})
+
+client.on("error", (err) => {
+    console.log(`Error occured: ${err.message}`)
 })
 
 
